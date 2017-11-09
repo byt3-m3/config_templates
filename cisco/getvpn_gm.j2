@@ -1,0 +1,18 @@
+crypto isakmp key {{ PHASE_1_KEY }} address 0.0.0.0
+!
+crypto isakmp policy 50
+ encr 3des
+ hash md5
+ authentication pre-share
+ group 2
+!
+crypto gdoi group {{ GDOI_GROUP_NAME }}
+ identity number {{ GDOI_IDEN_NUM }}
+  server address ipv4 {{ KEY_SERVER_IP }}
+
+crypto map {{ GETVPN_MAP_NAME }} local-address {{ GETVPN_UPADTE_SOURCE }}
+crypto map {{ GETVPN_MAP_NAME }} 10 gdoi
+  set group {{ GDOI_GROUP_NAME }}
+!
+interface {{ UPLINK_INTERFACE }}
+  crypto map {{ GETVPN_MAP_NAME }}

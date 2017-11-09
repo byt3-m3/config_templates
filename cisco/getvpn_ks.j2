@@ -1,0 +1,33 @@
+crypto isakmp keepalive 10 periodic
+!
+crypto isakmp policy 50
+  encr 3des
+  hash md5
+  group 2
+  authentication pre-share
+
+crypto isakmp key {{ PHASE_1_KEY }} address 0.0.0.0
+
+crypto ipsec transform-set {{ IPSEC_TRANSFORM_SET_NAME }} esp-3des esp-md5-hmac
+
+crypto ipsec profile {{ IPSEC_PROFILE_NAME }}
+  set transform-set {{ IPSEC_TRANSFORM_SET_NAME }}
+!
+crypto key generate rsa general-keys label {{ RSA_KEY_NAME }} modulus 1024 exportable
+!
+ip access-list extended {{ GETVPN_ACL_NAME }}
+ deny   ospf any any
+ deny   icmp any any
+ deny   tcp any any eq bgp
+ permit ip any any
+!
+crypto gdoi group {{ GDOI_GROUP_NAME }}
+  identity number {{ GDOI_IDEN_NUM }}
+  server local
+  rekey authentication mypubkey rsa {{ RSA_KEY_NAME }}
+  rekey transport unicast
+  sa ipsec 1
+   profile {{ IPSEC_PROFILE_NAME }}
+   match address ipv4 {{ GETVPN_ACL_NAME }}
+   replay time window-size 5
+  address ipv4 {{ KEY_SERVER_IP }}

@@ -1,0 +1,9 @@
+router bgp {{ LOCAL_BGP_ASN }}
+ template peer-policy AS{{ LOCAL_BGP_ASN }}_IPV4_P
+  soft-reconfiguration inbound
+  update-source {{ BGP_SRC_INT }}
+ exit-peer-policy
+!
+template peer-policy AS{{ REMOTE_BGP_ASN }}_IPV4_P
+ soft-reconfiguration inbound
+exit-peer-policy
