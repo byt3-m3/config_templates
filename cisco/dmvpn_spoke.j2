@@ -1,0 +1,9 @@
+interface Tunnel {{ TUNNEL_NUMBER }}
+ ip address {{ TUNNEL_IP }} {{ TUNNEL_MASK }}
+ no ip redirects
+ ip nhrp map multicast {{ NHS_NBMA }}
+ ip nhrp network-id {{ TUNNEL_NETID }}
+ ip nhrp nhs {{ NHS_TUN_IP }} nbma {{ NHS_NBMA }}
+ tunnel source {{ UPLINK_INTERFACE }}
+ tunnel mode gre multipoint
+end

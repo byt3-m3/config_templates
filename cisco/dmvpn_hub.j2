@@ -1,0 +1,7 @@
+interface Tunnel {{ TUNNEL_NUMBER }}
+ ip address {{ TUNNEL_IP }} {{ TUNNEL_MASK }}
+ no ip redirects
+ ip nhrp map multicast dynamic
+ ip nhrp network-id {{ TUNNEL_NETID }}
+ tunnel source {{ UPLINK_INTERFACE }}
+ tunnel mode gre multipoint
